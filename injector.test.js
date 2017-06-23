@@ -4,7 +4,7 @@ import { getKeys, hasKeys, isValue } from './injector';
 const source = { a: 12, b: { cc: 14, dd: 44 } };
 const obj = { a: 20, b: { dd: 55 } };
 const merge = { a: 20, b: { cc: 14, dd: 55 } }
-const badSource = {
+const uglySource = {
   a: [1, 2, 3, 4, 5],
   b: {
     forty: [23, 23, 25],
@@ -19,7 +19,7 @@ const badSource = {
     }
   }
 };
-const badObj = {
+const uglyObj = {
   a: [1, 'what', 3, 4, 5],
   b: {
     forty: [23, 'no', 25],
@@ -69,7 +69,7 @@ const uglyCombo = {
     },
   },
 }
-test('injector', () => {
+test('Easy test', () => {
   const out = injector(source, obj);
 
   expect(out).toEqual(merge);
@@ -79,17 +79,17 @@ test('simple objects', () => {
 
   expect(simple).toEqual({ a: 12, b: 14 });
 })
-test('simple objects', () => {
+test('empty object', () => {
   const simple = injector({ a: 12 }, { });
 
   expect(simple).toEqual({ a: 12 });
 })
-test('bad object', () => {
-  const bad = injector(badSource, badObj);
+test('ugly objects', () => {
+  const ugly = injector(uglySource, uglyObj);
 
-  expect(bad).toEqual(uglyCombo)
+  expect(ugly).toEqual(uglyCombo)
 })
-test('expect isValue {} to be true', () => {
+test('expect isValue of {} to be true', () => {
   expect(isValue({})).toBe(true)
   expect(isValue([])).toBe(true)
 })
@@ -98,6 +98,9 @@ test('expect array to work', () => {
 
   expect(result).toEqual({ a: [1, 2, 3], b: [3, 4, 5] })
 })
-test('hasKeys for anything', () => {
+test('hasKeys with array works', () => {
   expect(hasKeys([1, 2])).toBe(false)
+})
+test('isValue with array works', () => {
+  expect(isValue([1, 2])).toBe(true)
 })
